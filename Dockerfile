@@ -61,7 +61,7 @@ FROM alpine:3.16
 RUN addgroup -S wgui && \
     adduser -S -D -G wgui wgui
 
-RUN apk --no-cache add ca-certificates wireguard-tools jq
+RUN apk --no-cache add ca-certificates wireguard-tools jq openssl
 
 WORKDIR /app
 
@@ -71,6 +71,7 @@ RUN mkdir -p db
 COPY --from=builder --chown=wgui:wgui /build/wg-ui .
 RUN chmod +x wg-ui
 COPY init.sh .
+COPY wg-last-handshake-monitor.sh .
 
 EXPOSE 5000/tcp
 ENTRYPOINT ["./init.sh"]
